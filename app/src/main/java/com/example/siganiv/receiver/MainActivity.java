@@ -2,6 +2,7 @@ package com.example.siganiv.receiver;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText port;
     private Button start;
-    private Button reset;
+    private ToggleButton average;
     private Button archive;
     private DataValues result;
     private Receive receive;
@@ -40,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
     private boolean toggle2Flag = false;
     private boolean toggle3Flag = false;
     private boolean toggle4Flag = false;
+    private boolean toggleAverageFlag = false;
 
     private LineGraphSeries<DataPoint> series1;
     private LineGraphSeries<DataPoint> series2;
     private LineGraphSeries<DataPoint> series3;
     private LineGraphSeries<DataPoint> series4;
+    private LineGraphSeries<DataPoint> seriesAverage;
 
     Receive.ReceiveInterface receiveInterface = new Receive.ReceiveInterface() {
         @Override
@@ -54,6 +57,21 @@ public class MainActivity extends AppCompatActivity {
             series2 = new LineGraphSeries<DataPoint>(result.getSeries2());
             series3 = new LineGraphSeries<DataPoint>(result.getSeries3());
             series4 = new LineGraphSeries<DataPoint>(result.getSeries4());
+
+            seriesAverage = new LineGraphSeries<DataPoint>(result.getAverage());
+
+            series1.setTitle("Sensor 1");
+            series2.setTitle("Sensor 2");
+            series3.setTitle("Sensor 3");
+            series4.setTitle("Sensor 4");
+            seriesAverage.setTitle("Average");
+
+            series2.setColor(Color.YELLOW);
+            series3.setColor(Color.GREEN);
+            series4.setColor(Color.BLACK);
+            seriesAverage.setColor(Color.RED);
+
+            graph.removeAllSeries();
 
             if(toggle1Flag){
                 graph.addSeries(series1);
@@ -70,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
             if(toggle4Flag){
                 graph.addSeries(series4);
             }
+
+            if(toggleAverageFlag){
+                graph.addSeries(seriesAverage);
+            }
         }
     };
 
@@ -81,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         port = (EditText) findViewById(R.id.portButton);
         start = (Button) findViewById(R.id.startButton);
-        reset = (Button) findViewById(R.id.resetButton);
+        average = (ToggleButton) findViewById(R.id.averageButton);
         archive = (Button) findViewById(R.id.archiveButton);
         graph = (GraphView) findViewById(R.id.graph);
 
@@ -94,18 +116,9 @@ public class MainActivity extends AppCompatActivity {
         series2 = new LineGraphSeries<DataPoint>(result.getSeries2());
         series3 = new LineGraphSeries<DataPoint>(result.getSeries3());
         series4 = new LineGraphSeries<DataPoint>(result.getSeries4());
+        seriesAverage = new LineGraphSeries<DataPoint>(result.getAverage());
 
         port.setText(String.valueOf(DEFAULT_PORT));
-
-        //TODO colors
-//        series2.setTitle("Random Curve 1");
-//        series2.setColor(Color.RED);
-//        series3.setColor(Color.GREEN);
-//        series4.setColor(Color.BLACK);
-
-        //TODO scalable/scrollable
-//        graph.getViewport().setScalable(true);
-//        graph.getViewport().setScrollable(true);
     }
 
 
@@ -130,8 +143,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void onClickReset(View view) {
-        graph.removeAllSeries();
+    public void onClickAverage(View view) {
+        if (!toggleAverageFlag) {
+
+            graph.addSeries(seriesAverage);
+            toggleAverageFlag = true;
+
+        } else {
+
+            graph.removeSeries(seriesAverage);
+            toggleAverageFlag = false;
+        }
     }
 
     public void onClickToggle1(View view) {
@@ -185,4 +207,5 @@ public class MainActivity extends AppCompatActivity {
             toggle1Flag = false;
         }
     }
+
 }

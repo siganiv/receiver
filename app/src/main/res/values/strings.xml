@@ -10,8 +10,9 @@
     <string name="show3">Show series 3</string>
     <string name="hide4">Hide series 4</string>
     <string name="show4">Show series 4</string>
-    <string name="reset">Reset</string>
+    <string name="showAverage">Average</string>
+    <string name="hideAverage">Average</string>
     <string name="returnButton">Return</string>
     <string name="archive">Archive</string>
-    <string name="title_activity_archive">ArchiveActivity</string>
+    <string name="title_activity_archive">Archive</string>
 </resources>

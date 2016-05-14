@@ -16,6 +16,8 @@ public class DataValues {
     private final static int MAX_VALUES = 5;
     private final static String INITIAL_TEXT = "";
     private final static String NEXT_LINE = "\n";
+    private final static int MAX_AVERAGE = 5;
+    private final static int MAX_SERIES = 20;
 
     public List<CustomDataPoint> values;
 
@@ -92,7 +94,7 @@ public class DataValues {
     public String getHistory() {
         String tempString = INITIAL_TEXT;
         for (CustomDataPoint dataPoint : values) {
-            tempString=(dataPoint.toString()+NEXT_LINE+tempString);
+            tempString = (dataPoint.toString() + NEXT_LINE + tempString);
         }
 
         return tempString;
@@ -101,52 +103,142 @@ public class DataValues {
     public DataPoint[] getSeries1() {
         List<DataPoint> tempDataPoints = new ArrayList<>();
 
-        for (int i = 0; i < values.size(); i++) {
-            if (values.get(i).getState() == DataPointState.VALID) {
+        int count = 0;
+
+        for (int i = values.size()-1; i >=0; i--) {
+            if (values.get(i).getState() == DataPointState.VALID&&count<MAX_SERIES) {
                 tempDataPoints.add(new DataPoint(values.get(i).getTime(), values.get(i).getValue1()));
+                count++;
             }
         }
 
-        DataPoint[] array = tempDataPoints.toArray(new DataPoint[tempDataPoints.size()]);
+        List<DataPoint> tempDataPoints2 = new ArrayList<>();
+
+        for (int i = tempDataPoints.size()-1; i >= 0; i--) {
+            tempDataPoints2.add(tempDataPoints.get(i));
+        }
+
+        DataPoint[] array = tempDataPoints2.toArray(new DataPoint[tempDataPoints2.size()]);
         return array;
     }
 
     public DataPoint[] getSeries2() {
         List<DataPoint> tempDataPoints = new ArrayList<>();
 
-        for (int i = 0; i < values.size(); i++) {
-            if (values.get(i).getState() == DataPointState.VALID) {
+        int count = 0;
+
+        for (int i = values.size()-1; i >=0; i--) {
+            if (values.get(i).getState() == DataPointState.VALID&&count<MAX_SERIES) {
                 tempDataPoints.add(new DataPoint(values.get(i).getTime(), values.get(i).getValue2()));
+                count++;
             }
         }
 
-        DataPoint[] array = tempDataPoints.toArray(new DataPoint[tempDataPoints.size()]);
+        List<DataPoint> tempDataPoints2 = new ArrayList<>();
+
+        for (int i = tempDataPoints.size()-1; i >= 0; i--) {
+            tempDataPoints2.add(tempDataPoints.get(i));
+        }
+
+        DataPoint[] array = tempDataPoints2.toArray(new DataPoint[tempDataPoints2.size()]);
         return array;
     }
 
     public DataPoint[] getSeries3() {
         List<DataPoint> tempDataPoints = new ArrayList<>();
 
-        for (int i = 0; i < values.size(); i++) {
-            if (values.get(i).getState() == DataPointState.VALID) {
+        int count = 0;
+
+        for (int i = values.size()-1; i >=0; i--) {
+            if (values.get(i).getState() == DataPointState.VALID&&count<MAX_SERIES) {
                 tempDataPoints.add(new DataPoint(values.get(i).getTime(), values.get(i).getValue3()));
+                count++;
             }
         }
 
-        DataPoint[] array = tempDataPoints.toArray(new DataPoint[tempDataPoints.size()]);
+        List<DataPoint> tempDataPoints2 = new ArrayList<>();
+
+        for (int i = tempDataPoints.size()-1; i >= 0; i--) {
+            tempDataPoints2.add(tempDataPoints.get(i));
+        }
+
+        DataPoint[] array = tempDataPoints2.toArray(new DataPoint[tempDataPoints2.size()]);
         return array;
     }
 
     public DataPoint[] getSeries4() {
         List<DataPoint> tempDataPoints = new ArrayList<>();
 
-        for (int i = 0; i < values.size(); i++) {
-            if (values.get(i).getState() == DataPointState.VALID) {
+        int count = 0;
+
+        for (int i = values.size()-1; i >=0; i--) {
+            if (values.get(i).getState() == DataPointState.VALID&&count<MAX_SERIES) {
                 tempDataPoints.add(new DataPoint(values.get(i).getTime(), values.get(i).getValue4()));
+                count++;
             }
         }
 
-        DataPoint[] array = tempDataPoints.toArray(new DataPoint[tempDataPoints.size()]);
+        List<DataPoint> tempDataPoints2 = new ArrayList<>();
+
+        for (int i = tempDataPoints.size()-1; i >= 0; i--) {
+            tempDataPoints2.add(tempDataPoints.get(i));
+        }
+
+        DataPoint[] array = tempDataPoints2.toArray(new DataPoint[tempDataPoints2.size()]);
         return array;
+    }
+
+    public DataPoint[] getAverage() {
+        List<DataPoint> tempDataPoints = new ArrayList<>();
+
+        int count = 0;
+
+        for (int i = values.size() - 1; i >= 0; i--) {
+            if ((values.get(i).getState() == DataPointState.VALID) && count < MAX_AVERAGE) {
+                tempDataPoints.add(new DataPoint(values.get(i).getTime(), countAverage(values.get(i).getValue1(), values.get(i).getValue2(), values.get(i).getValue3(), values.get(i).getValue4())));
+                count++;
+            }
+        }
+
+        List<DataPoint> tempDataPoints2 = new ArrayList<>();
+
+        for (int i = tempDataPoints.size()-1; i >= 0; i--) {
+            tempDataPoints2.add(tempDataPoints.get(i));
+        }
+
+        DataPoint[] array = tempDataPoints2.toArray(new DataPoint[tempDataPoints2.size()]);
+        return array;
+    }
+
+    private double countAverage(double first, double second, double third, double fourth) {
+        double result = 0;
+
+        int denominator = 4;
+
+        if (first == 0) {
+            denominator--;
+        }
+
+        if (second == 0) {
+            denominator--;
+        }
+
+        if (third == 0) {
+            denominator--;
+        }
+
+        if (fourth == 0) {
+            denominator--;
+        }
+
+        if (denominator == 0) {
+            denominator = 1;
+        }
+
+        double numerator = first + second + third + fourth;
+
+        result = numerator / denominator;
+
+        return result;
     }
 }
